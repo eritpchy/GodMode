@@ -118,7 +118,7 @@ public final class BackupUtils {
                 Gson gson = new GsonBuilder().create();
                 JsonElement jsonElement = gson.toJsonTree(backupViewRuleList);
                 jsonObject.add("rules", jsonElement);
-                FileUtils.stringToFile(manifestFile, jsonObject.toString());
+                FileUtils.writeData(manifestFile, jsonObject.toString());
                 backupFilePathList.add(manifestFile.getPath());
                 OutputStream out = GodModeApplication.getApplication().getContentResolver().openOutputStream(toUri);
                 ZipUtils.compress(out, backupFilePathList.toArray(new String[0]));
@@ -140,7 +140,7 @@ public final class BackupUtils {
                 ZipUtils.uncompress(in, restoreDir.getPath());
                 File manifestFile = new File(restoreDir, MANIFEST_FILE);
                 if (!manifestFile.exists()) throw new RestoreException("Miss manifest.json file.");
-                String json = FileUtils.readTextFile(manifestFile, 0, null);
+                String json = FileUtils.readContent(manifestFile);
                 Gson gson = new GsonBuilder().create();
                 JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
                 int version = jsonObject.get("version").getAsInt();

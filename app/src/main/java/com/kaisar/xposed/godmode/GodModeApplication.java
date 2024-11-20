@@ -1,13 +1,7 @@
 package com.kaisar.xposed.godmode;
 
-import static com.kaisar.xposed.godmode.injection.util.FileUtils.S_IRWXG;
-import static com.kaisar.xposed.godmode.injection.util.FileUtils.S_IRWXO;
-import static com.kaisar.xposed.godmode.injection.util.FileUtils.S_IRWXU;
-
 import android.app.Application;
 import android.content.Context;
-
-import com.kaisar.xposed.godmode.injection.util.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

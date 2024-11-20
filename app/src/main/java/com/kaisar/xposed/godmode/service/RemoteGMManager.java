@@ -28,26 +28,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class RemoteGMManager extends IGodModeManager.Stub {
 
-    private static final ScheduledExecutorService mExec = Executors.newSingleThreadScheduledExecutor();
     public static final RemoteGMManager INSTANCE = new RemoteGMManager();
     private static boolean mInited;
     private static Uri mConfigUri;
     private static WeakReference<Context> mContext = null;
     private static XC_LoadPackage.LoadPackageParam mPParam;
-
-    public static IGodModeManager mGMM = IGodModeManager.Stub.getDefaultImpl();
     private static File mLocalRules;
 
     public static void init(Context pCon, XC_LoadPackage.LoadPackageParam loadPackageParam) {
@@ -148,7 +141,6 @@ public class RemoteGMManager extends IGodModeManager.Stub {
         viewRules.add(viewRule);
         //getType测试
         Uri.Builder tBuilder = mConfigUri.buildUpon().path(RuleProvider.PATH_WRITE_RULE);
-        String tStr = BitmapHelper.iconToStr(pIcon);
         String tKey = new Random(System.currentTimeMillis()).nextInt(100000000) + "";
         tBuilder.appendQueryParameter("key", tKey);
         tBuilder.appendQueryParameter("rule", new Gson().toJson(viewRule));
@@ -170,51 +162,8 @@ public class RemoteGMManager extends IGodModeManager.Stub {
                 tResolver.getType(tBuilder.build());
             }
         }
-//        if (tAmount > 1) {
-//            for (int i = 0; i < tAmount; i++) {
-//                tBuilder = mConfigUri.buildUpon().path(RuleProvider.PATH_RULE_IMG);
-//                int tEnd = (i + 1) * 100000;
-//                if (tEnd > tStr.length()) tEnd = tStr.length();
-//                tBuilder.appendQueryParameter("key", tKey);
-//                tBuilder.appendQueryParameter("icon", tStr.substring(i * 100000, tEnd));
-//                mContext.get().getContentResolver().getType(tBuilder.build());
-//            }
-//        }
-
-
-        //aidl测试
-        //mGMM.writeRule(packageName, viewRule, pIcon);
-
-        // content provider insert测试
-        /*
-        Uri.Builder tBuilder = mConfigUri.buildUpon().path(RuleProvider.PATH_WRITE_RULE);
-        tBuilder.appendQueryParameter("","");
-        ContentValues tValue = new ContentValues();
-        tValue.put("rule", new GsonBuilder().create().toJson(viewRule));
-        tValue.put("icon", BitmapHelper.iconToBArr(pIcon));
-        try {
-            ContentResolver tCR = mContext.get().getContentResolver();
-            Logger.i("GodMode", tCR.acquireContentProviderClient(tBuilder.build()) + "");
-            mContext.get().getContentResolver().insert(tBuilder.build(), tValue);
-        } catch (Throwable e) {
-            Logger.e("GodMode", "在新增规则时错误", e);
-        }
-        */
 
         return true;
-    }
-
-    /**
-     * 获取指定长度的字符串
-     *
-     * @param pLen 100的倍数
-     * @return
-     */
-    private static String getStr(int pLen) {
-        String tStr = "gxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6DpuhwdtgxeXLxlY0YwEP61SYcX5Wj28srKBX8UQzCykdlE80hAwsgemXWXtgU2GzmPGckCxv5kSt5wOngOuaXVyVv7Xk0nPacWC6Dpuhwdt";
-        StringBuilder tSb = new StringBuilder(tStr);
-        while (--pLen > 0) tSb.append(tStr);
-        return tSb.toString();
     }
 
     @Override
