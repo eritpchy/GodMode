@@ -19,7 +19,6 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ import com.kaisar.xposed.godmode.service.RemoteGMManager;
 import com.kaisar.xposed.godmode.service.RuleUpdateReceiver;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -140,13 +138,8 @@ public final class GodModeInjector implements IXposedHookLoadPackage, IXposedHoo
             XposedHelpers.findAndHookMethod(Activity.class, "onResume", tHook);
             registerHook();
 
-            tHook = new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                    param.setResult(new GodModeManager(RemoteGMManager.INSTANCE));
-                }
-            };
-            XposedHelpers.findAndHookMethod(GodModeManager.class, "getServerImpl", tHook);
+            XposedHelpers.findAndHookMethod(GodModeManager.class, "getServerImpl"
+                    , XC_MethodReplacement.returnConstant(new GodModeManager(RemoteGMManager.INSTANCE)));
 
             tHook = new XC_MethodHook() {
                 protected void afterHookedMethod(MethodHookParam pMParam) {
@@ -191,8 +184,9 @@ public final class GodModeInjector implements IXposedHookLoadPackage, IXposedHoo
             return;
         }
         try {
-            res.getString(R.string.res_inject_success);
-            return;
+            String tMsg = res.getString(R.string.res_inject_success);
+            Logger.d(TAG, tMsg + "(repeat)");
+            if (!TextUtils.isEmpty(tMsg)) return;
         } catch (Resources.NotFoundException ignored) {
         }
         try {
