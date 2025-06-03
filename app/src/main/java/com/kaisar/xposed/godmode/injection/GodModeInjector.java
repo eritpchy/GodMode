@@ -14,6 +14,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.XModuleResources;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -150,7 +151,11 @@ public final class GodModeInjector implements IXposedHookLoadPackage, IXposedHoo
                     // 注册规则更新广播
                     try {
                         RemoteGMManager.init(tApp, loadPackageParam);
-                        tApp.registerReceiver(new RuleUpdateReceiver(), RuleUpdateReceiver.getIntentFilter());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            tApp.registerReceiver(new RuleUpdateReceiver(), RuleUpdateReceiver.getIntentFilter(), Context.RECEIVER_EXPORTED);
+                        } else {
+                            tApp.registerReceiver(new RuleUpdateReceiver(), RuleUpdateReceiver.getIntentFilter());
+                        }
 
                         GodModeManager gmManager = GodModeManager.getInstance();
                         gmManager.addObserver(loadPackageParam.packageName, new ManagerObserver());

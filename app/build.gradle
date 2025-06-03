@@ -4,17 +4,17 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 35
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
         applicationId "com.viewblocker.jrsen"
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdk 21
+        targetSdk 35
         versionCode 22
-        versionName "3.0.0-beta1"
+        versionName "3.0.0-beta2"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
     }
@@ -25,6 +25,10 @@ android {
     androidResources {
         additionalParameters("--allow-reserved-package-id", "--package-id", "0x95")
     }
+    buildFeatures {
+        aidl true
+    }
+    namespace 'com.kaisar.xposed.godmode'
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             def createTime = new Date().format("YYMMdd.HHmmss", TimeZone.getTimeZone("GMT+08:00"))
@@ -38,6 +42,10 @@ repositories {
     maven {
         url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
     }
+    maven {
+        url "https://artifactory.appodeal.com/appodeal-public/"
+    }
+    
 }
 
 dependencies {

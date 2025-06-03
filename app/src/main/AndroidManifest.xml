@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.kaisar.xposed.godmode">
+>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
@@ -10,6 +10,9 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
 
@@ -59,6 +62,7 @@
             android:name=".NotificationService"
             android:exported="false"
             android:icon="@drawable/ic_angel_normal"
+            android:foregroundServiceType="dataSync"
             android:label="@string/app_name" />
 
         <service
