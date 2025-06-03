@@ -7,10 +7,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ServiceInfo;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -64,7 +66,11 @@ public final class NotificationService extends Service implements SharedPreferen
 
     private void postNotification(boolean editMode) {
         if (editMode) {
-            startForeground(1, buildNotification(true));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(1, buildNotification(true), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            } else {
+                startForeground(1, buildNotification(true));
+            }
         } else {
             stopForeground(false);
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -77,6 +83,11 @@ public final class NotificationService extends Service implements SharedPreferen
         PendingIntent managerPendingIntent = PendingIntent.getActivity(this, 0, managerIntent, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT);
         Intent intent = new Intent(this, NotificationService.class);
         intent.setAction(Intent.ACTION_EDIT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.e("GodMode", "PendingIntent.FLAG_IMMUTABLE");
+        } else {
+            Log.e("GodMode", "PendingIntent.FLAG_UPDATE_CURRENT");
+        }
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT);
         return new NotificationCompat.Builder(this, TAG)
                 .setSmallIcon(R.drawable.ic_angel_small)

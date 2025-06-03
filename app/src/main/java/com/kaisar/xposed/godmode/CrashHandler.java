@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Build;
 import androidx.annotation.NonNull;
 
 import com.kaisar.xposed.godmode.injection.util.Logger;
@@ -79,7 +80,7 @@ public final class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void restartSelf() {
         Intent intent = new Intent(mContext, SettingsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent restartIntent = PendingIntent.getActivity(mContext, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent restartIntent = PendingIntent.getActivity(mContext, 1, intent, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         if (mgr != null) {
             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 5, restartIntent);

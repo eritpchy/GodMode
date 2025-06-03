@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:consumeSystemWindowsInsets="start|end"
-        app:edgeToEdge="true"
+        app:edgeToEdge="false"
         app:fitsSystemWindowsInsets="start|end">
 
     <androidx.fragment.app.FragmentContainerView
@@ -13,15 +13,15 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="?attr/actionBarSize"
             app:defaultNavHost="true"
             app:fitsSystemWindowsInsets="top|bottom"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="false"
+            android:fitsSystemWindows="true"
             app:fitsSystemWindowsInsets="top">
 
         <com.google.android.material.appbar.MaterialToolbar
